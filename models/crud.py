@@ -1,6 +1,5 @@
 from unittest import result
-from sqlalchemy import delete, false, true, values
-from db import cursor,conn
+from .dbconection import *
 from io import BytesIO
 
 # cursor.execute("select version()")
@@ -23,9 +22,9 @@ def Is_Author_Exist(email):
     cursor.execute(sql%email)
     result = cursor.fetchall()
     if result!=[]:
-        return true
+        return True
     else:
-        return false
+        return False
 
 
 def Update_Author(id,email,password,first_name,last_name):
@@ -99,9 +98,10 @@ def Get_all_Post():
     sql = "SELECT * FROM post"
     cursor.execute(sql)
     result = cursor.fetchall()
+    print(result)
     meta=["id","title","description","author_id"]
-    conn.close()
-    return result
+    data=dict(zip(meta,result[0]))
+    return data
     
 def Get_One_Post(id):
     sql = "SELECT * FROM post WHERE id=%s"
@@ -115,7 +115,6 @@ def Get_One_Post(id):
     # data["post_pic"]=str_img
     print(data)
     return data
-Get_One_Post("20")
 
 
 
