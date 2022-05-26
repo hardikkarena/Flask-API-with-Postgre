@@ -9,9 +9,10 @@ from werkzeug.utils import secure_filename
 import os
 import hashlib
 import sys
-import app
+# import app
 
-
+USER_IMAGE_PATH ='src\\media\\profile'
+POST_IMAGE_PATH = 'src\\media\\post'
 
 def index():
     return "Hello World"
@@ -31,12 +32,12 @@ def register():
     if Is_Author_Exist(email) == True:
         return jsonify('User Already Exist'),501
     else:
-        profil_pic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER'],secure_filename(profil_pic.filename)))
-        new_user = Insert_Author(id,email,password,first_name,last_name,filename)   
+        new_user = Insert_Author(id,email,password,first_name,last_name,filename)  
+        profil_pic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),USER_IMAGE_PATH,secure_filename(profil_pic.filename)))
         img = new_user["profile_pic"]
-        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER'],secure_filename(profil_pic.filename))
+        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),USER_IMAGE_PATH,secure_filename(profil_pic.filename))
         new_user["profile_pic"]=str_img
-        return jsonify(new_user)
+        return jsonify("sdnfkjs")
 
 def login():
     if request.content_type == 'application/json':
@@ -69,8 +70,8 @@ def post_create():
         post_pic1 = request.files['post_pic']
         post_pic = secure_filename(post_pic1.filename)
         new_post = Insert_Post(id,title,description,author_id,post_pic)
-        post_pic1.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],secure_filename(post_pic1.filename)))
-        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],secure_filename(post_pic1.filename))
+        post_pic1.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),POST_IMAGE_PATH,secure_filename(post_pic1.filename)))
+        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),POST_IMAGE_PATH,secure_filename(post_pic1.filename))
         new_post["post_pic"]=str_img
         return jsonify(new_post),201
     else:
@@ -80,7 +81,7 @@ def post(id):
     # try:
     post = Get_One_Post(id)
     img = post["post_pic"]
-    str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],str(img,'utf8'))
+    str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),POST_IMAGE_PATH,str(img,'utf8'))
     post["post_pic"]=str_img
     if post != []:
         return jsonify(post),200
@@ -94,7 +95,7 @@ def posts():
     list_pof_post=[]
     for i in result:
         i=list(i)
-        i[4] =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],str(i[4],'utf8'))
+        i[4] =os.path.join(os.path.abspath(os.path.dirname(__file__)),POST_IMAGE_PATH,str(i[4],'utf8'))
         list_pof_post.append([i[0],i[1],i[2],i[3],i[4]])
     for j in list_pof_post:
         print(j)
@@ -123,7 +124,7 @@ def profile(id):
     user = Get_One_User(id)
     if user != []:
         img = user["profile_pic"]
-        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER'],str(img,'utf8'))
+        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),USER_IMAGE_PATH,str(img,'utf8'))
         user["profile_pic"]=str_img
         return jsonify(user),200
     else:
