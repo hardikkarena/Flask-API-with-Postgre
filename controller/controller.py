@@ -31,13 +31,12 @@ def register():
     if Is_Author_Exist(email) == True:
         return jsonify('User Already Exist'),501
     else:
-        print(type(id))
         profil_pic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER'],secure_filename(profil_pic.filename)))
         new_user = Insert_Author(id,email,password,first_name,last_name,filename)   
-        # img = new_user["profile_pic"]
-        # str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER'],secure_filename(profil_pic.filename))
-        # new_user["profile_pic"]=str_img
-        return jsonify("inserted")
+        img = new_user["profile_pic"]
+        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER'],secure_filename(profil_pic.filename))
+        new_user["profile_pic"]=str_img
+        return jsonify(new_user)
 
 def login():
     if request.content_type == 'application/json':
@@ -71,6 +70,8 @@ def post_create():
         post_pic = secure_filename(post_pic1.filename)
         new_post = Insert_Post(id,title,description,author_id,post_pic)
         post_pic1.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],secure_filename(post_pic1.filename)))
+        str_img =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],secure_filename(post_pic1.filename))
+        new_post["post_pic"]=str_img
         return jsonify(new_post),201
     else:
         return jsonify('User Not Login'),501
