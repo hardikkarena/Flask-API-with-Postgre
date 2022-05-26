@@ -90,7 +90,15 @@ def post(id):
 
 def posts():
     result = Get_all_Post()
-    return jsonify(result),200
+    print(type(result))
+    list_pof_post=[]
+    for i in result:
+        i=list(i)
+        i[4] =os.path.join(os.path.abspath(os.path.dirname(__file__)),app.app.config['UPLOAD_FOLDER_FOR_POST'],str(i[4],'utf8'))
+        list_pof_post.append([i[0],i[1],i[2],i[3],i[4]])
+    for j in list_pof_post:
+        print(j)
+    return jsonify(list_pof_post),200
 
 def update_post(id):
     post = Get_One_Post(id)

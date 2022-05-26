@@ -98,10 +98,9 @@ def Get_all_Post():
     sql = "SELECT * FROM post"
     cursor.execute(sql)
     result = cursor.fetchall()
-    print(result)
-    meta=["id","title","description","author_id"]
-    data=dict(zip(meta,result[0]))
-    return data
+    # meta=["id","title","description","author_id"]
+    # data=dict(zip(meta,result[0]))
+    return result
     
 def Get_One_Post(id):
     sql = "SELECT * FROM post WHERE id=%s"
